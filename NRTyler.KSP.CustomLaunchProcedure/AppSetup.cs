@@ -15,7 +15,7 @@ using System;
 namespace NRTyler.KSP.CustomLaunchProcedure
 {
     /// <summary>
-    /// Holds information that is required to be present for this application to accomplish its' task.
+    /// Holds information directory info that must to be present for this application to run properly.
     /// </summary>
     public class AppSetup
     {

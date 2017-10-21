@@ -22,10 +22,10 @@ namespace NRTyler.KSP.CustomLaunchProcedure
     {
         private static void Main()
         {
+            Console.Title = "KSP Custom Launch Procedure";
+
             using (LoggingService.LogWriter)
             {
-                //Message.LogService = new LoggingService();
-
                 Message.Write("KSP Custom Launch Procedure is Starting!");
 
                 var appSetup = SetupApplication();
@@ -34,6 +34,8 @@ namespace NRTyler.KSP.CustomLaunchProcedure
 
                 LaunchGame();
             }
+
+            ClosingSequence(30);
         }
 
         private static void LaunchGame()
@@ -53,7 +55,7 @@ namespace NRTyler.KSP.CustomLaunchProcedure
             process.Start();
 
             process.PriorityClass = ProcessPriorityClass.High;
-            Message.Write("Process' priority class set to 'High'.");
+            Message.Write($"Process' priority class set to '{process.PriorityClass.ToString()}'.");
 
             process.WaitForExit(1000);
             Message.Write("KSP Custom Launch Procedure has completed!");
@@ -102,6 +104,31 @@ namespace NRTyler.KSP.CustomLaunchProcedure
             Message.Write("Application setup complete.");
 
             return appSetup;
+        }
+
+        /// <summary>
+        /// Contains the closing countdown logic that's executed before the <see cref="Console" /> closes.
+        /// </summary>
+        /// <param name="waitFor">How many seconds the closing sequence last for.</param>
+        private static void ClosingSequence(int waitFor)
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            
+            while (true)
+            {
+                // Trap the loop here until the desired amount of time has elapsed. 
+                // Once the time has been reached, continue down the chain.
+                if (stopwatch.Elapsed.Seconds < waitFor)
+                {
+                    continue;
+                }
+
+                stopwatch.Stop();
+                break;
+            }
+
+            Process.GetCurrentProcess().Close();
         }
     }
 }

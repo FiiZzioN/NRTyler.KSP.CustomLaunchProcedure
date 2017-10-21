@@ -62,12 +62,16 @@ namespace NRTyler.KSP.CustomLaunchProcedure
         /// <param name="beginningPath">The beginning path.</param>
         /// <param name="destinationPath">The destination path.</param>
         /// <param name="overwriteFiles">If set to true, any files that already exist in the destination will be overwritten.</param>
-        /// <exception cref="DirectoryNotFoundException">Get's thrown if the beginning path can't be found.</exception>
+        /// <exception cref="DirectoryNotFoundException">Get's thrown if the beginning or destination path can't be found.</exception>
         public void CopyFilesAndSubdirectories(string beginningPath, string destinationPath, bool overwriteFiles)
         {
-            // Make sure the directory we're working with actually exists.
+            // Make sure the directories we're working with actually exist.
             if (!Directory.Exists(beginningPath))
                 throw new DirectoryNotFoundException($"'{beginningPath}' doesn't exist or can't be found!");
+
+            // Be aware this is checking for the AppSetup destination directory, not this method's argument 'destinationPath'.
+            if (!Directory.Exists(AppSetup.DestinationDirectory))
+                throw new DirectoryNotFoundException($"'{AppSetup.DestinationDirectory}' doesn't exist or can't be found!");
 
             var beginningDirectory = new DirectoryInfo(beginningPath);
 
