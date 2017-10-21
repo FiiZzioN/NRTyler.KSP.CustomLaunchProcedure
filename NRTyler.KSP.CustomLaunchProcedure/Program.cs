@@ -36,6 +36,7 @@ namespace NRTyler.KSP.CustomLaunchProcedure
             }
 
             ClosingSequence(30);
+            ConsoleEx.ClosingMessage();
         }
 
         private static void LaunchGame()
@@ -61,7 +62,6 @@ namespace NRTyler.KSP.CustomLaunchProcedure
             Message.Write("KSP Custom Launch Procedure has completed!");
 
             Message.Write($"This program's log file can be found at: {LoggingService.LogFilePath}");
-            ConsoleEx.ClosingMessage();
         }
 
         /// <summary>
