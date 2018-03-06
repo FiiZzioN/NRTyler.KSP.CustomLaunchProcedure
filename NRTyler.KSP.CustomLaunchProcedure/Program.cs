@@ -13,8 +13,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using NRTyler.CodeLibrary.Extensions;
-using NRTyler.CodeLibrary.Utilities;
 
 namespace NRTyler.KSP.CustomLaunchProcedure
 {
@@ -22,26 +20,36 @@ namespace NRTyler.KSP.CustomLaunchProcedure
     {
         private static void Main()
         {
+            var applicationSettings = LoadApplicationSettings();
+
             Console.Title = "KSP Custom Launch Procedure";
 
             using (LoggingService.LogWriter)
             {
                 Message.Write("KSP Custom Launch Procedure is Starting!");
 
-                var appSetup = SetupApplication();
+                var appSetup = SetupApplication(applicationSettings);
 
                 CopyFiles(appSetup, true);
 
-                LaunchGame();
+                LaunchGame(applicationSettings);
             }
 
             ClosingSequence(30);
-            ConsoleEx.ClosingMessage();
         }
 
-        private static void LaunchGame()
+        private static ApplicationSettings LoadApplicationSettings()
         {
-            var gameName = "KSP_x64";
+            Message.Write("Retrieving saved settings!");
+
+            var repo = new SettingsRepo();
+
+            return repo.Retrieve(ApplicationSettings.FileName);
+        }
+
+        private static void LaunchGame(ApplicationSettings applicationSettings)
+        {
+            var gameName = applicationSettings.GameExecutableName;
 
             var process = new Process
             {
@@ -63,6 +71,7 @@ namespace NRTyler.KSP.CustomLaunchProcedure
 
             Message.Write($"This program's log file can be found at: {LoggingService.LogFilePath}");
         }
+
 
         /// <summary>
         /// Copies the files and subdirectories to the desired location.
@@ -91,14 +100,14 @@ namespace NRTyler.KSP.CustomLaunchProcedure
         /// Sets various fields to the desired values before the application runs various methods.
         /// </summary>
         /// <returns>AppSetup.</returns>
-        private static AppSetup SetupApplication()
+        private static AppSetup SetupApplication(ApplicationSettings applicationSettings)
         {
             Message.Write("Setting up application...");
 
             var appSetup = new AppSetup
             {
-                BeginningDirectory   = $"{AppSetup.BackupFiles}/MechJeb2",
-                DestinationDirectory = $"{AppSetup.GameData}/MechJeb2"
+                BeginningDirectory   = $"{AppSetup.CurrentDirectory}/{applicationSettings.BackupFilesFolderName}/{applicationSettings.ReplacableFilesFolderName}",
+                DestinationDirectory = $"{AppSetup.GameData}/{applicationSettings.ReplacableFilesFolderName}"
             };
 
             Message.Write("Application setup complete.");

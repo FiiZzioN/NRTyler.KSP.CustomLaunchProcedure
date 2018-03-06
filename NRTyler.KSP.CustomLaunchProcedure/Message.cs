@@ -5,13 +5,12 @@
 // Created          : 09-21-2017
 //
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 09-22-2017
+// Last Modified On : 03-05-2018
 //
 // License          : MIT License
 // ***********************************************************************
 
 using System;
-using NRTyler.CodeLibrary.Utilities;
 
 namespace NRTyler.KSP.CustomLaunchProcedure
 {
@@ -108,7 +107,6 @@ namespace NRTyler.KSP.CustomLaunchProcedure
             Message.Write($"A {exceptionName} has occurred! {additionalInfo} Exception details are listed below.");
             Message.Write("Begin exception log.");
             Console.WriteLine();
-            exception.LogExceptionInfo();
             Message.Write("End exception log.");
             Console.WriteLine();            
         }
