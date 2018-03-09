@@ -23,7 +23,7 @@ namespace NRTyler.KSP.CustomLaunchProcedure
         /// <summary>
         /// Initializes a new instance of the <see cref="FileCopier"/> class.
         /// </summary>
-        public FileCopier() : this(new AppSetup())
+        public FileCopier() : this(new ApplicationDirectoryInfo())
         {
             
         }
@@ -32,7 +32,7 @@ namespace NRTyler.KSP.CustomLaunchProcedure
         /// Initializes a new instance of the <see cref="FileCopier"/> class.
         /// </summary>
         /// <param name="appSetup">The application setup.</param>
-        public FileCopier(AppSetup appSetup)
+        public FileCopier(ApplicationDirectoryInfo appSetup)
         {
             AppSetup = appSetup;
         }
@@ -40,7 +40,7 @@ namespace NRTyler.KSP.CustomLaunchProcedure
         /// <summary>
         /// Gets or sets the application setup.
         /// </summary>
-        public AppSetup AppSetup { get; set; }
+        public ApplicationDirectoryInfo AppSetup { get; set; }
 
 
 
@@ -114,7 +114,7 @@ namespace NRTyler.KSP.CustomLaunchProcedure
         /// <param name="appSetup">The application setup holding the beginning and destination paths.</param>
         /// <param name="overwriteFiles">If set to true, any files that already exist in the destination will be overwritten.</param>
         /// <exception cref="DirectoryNotFoundException">Get's thrown if the beginning path can't be found.</exception>
-        public void CopyFilesAndSubdirectories(AppSetup appSetup, bool overwriteFiles)
+        public void CopyFilesAndSubdirectories(ApplicationDirectoryInfo appSetup, bool overwriteFiles)
         {
             CopyFilesAndSubdirectories(appSetup.BeginningDirectory, appSetup.DestinationDirectory, overwriteFiles);
         }

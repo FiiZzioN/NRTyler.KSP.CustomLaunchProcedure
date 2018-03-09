@@ -5,7 +5,7 @@
 // Created          : 09-20-2017
 //
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 09-22-2017
+// Last Modified On : 03-09-2018
 //
 // License          : MIT License
 // ***********************************************************************
@@ -20,15 +20,13 @@ namespace NRTyler.KSP.CustomLaunchProcedure
     {
         private static void Main()
         {
-            var applicationSettings = LoadApplicationSettings();
-
-            Console.Title = "KSP Custom Launch Procedure";
+            OpeningSequence();
 
             using (LoggingService.LogWriter)
             {
-                Message.Write("KSP Custom Launch Procedure is Starting!");
-
-                var appSetup = SetupApplication(applicationSettings);
+                // Get our dynamic variables so they can be used in the application.
+                var applicationSettings = LoadApplicationSettings();
+                var appSetup            = SetupApplication(applicationSettings);
 
                 CopyFiles(appSetup, true);
 
@@ -38,6 +36,20 @@ namespace NRTyler.KSP.CustomLaunchProcedure
             ClosingSequence(30);
         }
 
+        /// <summary>
+        /// The steps this application goes through to ensure everything is setup to run properly.
+        /// </summary>
+        private static void OpeningSequence()
+        {
+            Console.Title = "KSP Custom Launch Procedure";
+            Message.Write("KSP Custom Launch Procedure is Starting!");
+
+            LoggingService.DeleteLogFile();
+        }
+
+        /// <summary>
+        /// Loads this application's settings that hold dynamic variables.
+        /// </summary>
         private static ApplicationSettings LoadApplicationSettings()
         {
             Message.Write("Retrieving saved settings!");
@@ -47,6 +59,10 @@ namespace NRTyler.KSP.CustomLaunchProcedure
             return repo.Retrieve(ApplicationSettings.FileName);
         }
 
+        /// <summary>
+        /// Goes through the process of starting the game.
+        /// </summary>
+        /// <param name="applicationSettings">This application's settings.</param>
         private static void LaunchGame(ApplicationSettings applicationSettings)
         {
             var gameName = applicationSettings.GameExecutableName;
@@ -55,7 +71,7 @@ namespace NRTyler.KSP.CustomLaunchProcedure
             {
                 StartInfo =
                 {
-                    FileName = $"{AppSetup.CurrentDirectory}/{gameName}.exe",
+                    FileName       = $"{ApplicationDirectoryInfo.CurrentDirectory}/{gameName}.exe",
                     CreateNoWindow = true
                 }
             };
@@ -76,17 +92,17 @@ namespace NRTyler.KSP.CustomLaunchProcedure
         /// <summary>
         /// Copies the files and subdirectories to the desired location.
         /// </summary>
-        /// <param name="appSetup">The application setup.</param>
+        /// <param name="directoryInfo">This application's directory info.</param>
         /// <param name="overwriteFiles">If set to true, any files that already exist in the destination will be overwritten.</param>
-        private static void CopyFiles(AppSetup appSetup, bool overwriteFiles)
+        private static void CopyFiles(ApplicationDirectoryInfo directoryInfo, bool overwriteFiles)
         {
-            var fileCopier = new FileCopier(appSetup);
+            var fileCopier = new FileCopier(directoryInfo);
 
             try
             {
                 Message.Write("Attempting to copy files from backup.");
 
-                fileCopier.CopyFilesAndSubdirectories(appSetup, overwriteFiles);
+                fileCopier.CopyFilesAndSubdirectories(directoryInfo, overwriteFiles);
 
                 Message.Write("Copying Complete!");
             }
@@ -100,14 +116,14 @@ namespace NRTyler.KSP.CustomLaunchProcedure
         /// Sets various fields to the desired values before the application runs various methods.
         /// </summary>
         /// <returns>AppSetup.</returns>
-        private static AppSetup SetupApplication(ApplicationSettings applicationSettings)
+        private static ApplicationDirectoryInfo SetupApplication(ApplicationSettings applicationSettings)
         {
             Message.Write("Setting up application...");
 
-            var appSetup = new AppSetup
+            var appSetup = new ApplicationDirectoryInfo
             {
-                BeginningDirectory   = $"{AppSetup.CurrentDirectory}/{applicationSettings.BackupFilesFolderName}/{applicationSettings.ReplacableFilesFolderName}",
-                DestinationDirectory = $"{AppSetup.GameData}/{applicationSettings.ReplacableFilesFolderName}"
+                BeginningDirectory = $"{ApplicationDirectoryInfo.CurrentDirectory}/{applicationSettings.BackupFilesFolderName}/{applicationSettings.ReplacableFilesFolderName}",
+                DestinationDirectory = $"{ApplicationDirectoryInfo.GameData}/{applicationSettings.ReplacableFilesFolderName}"
             };
 
             Message.Write("Application setup complete.");
@@ -118,7 +134,7 @@ namespace NRTyler.KSP.CustomLaunchProcedure
         /// <summary>
         /// Contains the closing countdown logic that's executed before the <see cref="Console" /> closes.
         /// </summary>
-        /// <param name="waitFor">How many seconds the closing sequence last for.</param>
+        /// <param name="waitFor">How many seconds the closing sequence should last for.</param>
         private static void ClosingSequence(int waitFor)
         {
             var stopwatch = new Stopwatch();

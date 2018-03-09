@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationSettings.cs" />
-    <Compile Include="AppSetup.cs" />
+    <Compile Include="ApplicationDirectoryInfo.cs" />
     <Compile Include="FileCopier.cs" />
     <Compile Include="LoggingService.cs" />
     <Compile Include="Message.cs" />

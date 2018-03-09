@@ -27,7 +27,7 @@ namespace NRTyler.KSP.CustomLaunchProcedure
         /// <summary>
         /// Gets the log file's path in its' entirety.
         /// </summary>
-        public static string LogFilePath { get; } = $"{AppSetup.CurrentDirectory}/{LogFileName}";
+        public static string LogFilePath { get; } = $"{ApplicationDirectoryInfo.CurrentDirectory}/{LogFileName}";
 
         /// <summary>
         /// Gets the log file stream.
@@ -46,6 +46,33 @@ namespace NRTyler.KSP.CustomLaunchProcedure
         public static void WriteToLog(string message)
         {
             LogWriter.WriteLine(message);
+        }
+
+        /// <summary>
+        /// Deletes the log file.
+        /// </summary>
+        public static void DeleteLogFile()
+        {
+            // No log file to delete.
+            if (!File.Exists(LogFilePath))
+            {
+                Message.Write("No log file to delete.");
+                // If there's no log file to delete, this is a way to prevent the deletion confirmation message from appearing incorrectly.
+                return;
+            }
+
+            // Log file deletion.
+            if (File.Exists(LogFilePath))
+            {
+                Message.Write("Deleting log file to ensure no out-of-date information is present.");
+                File.Delete(LogFilePath);
+            }
+
+            // Deletion Confirmation
+            if (!File.Exists(LogFilePath))
+            {
+                Message.Write("Log file successfully deleted.");
+            }
         }
     }
 }

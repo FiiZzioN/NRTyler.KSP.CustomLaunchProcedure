@@ -1,12 +1,12 @@
-﻿// ************************************************************************
+﻿// ***********************************************************************
 // Assembly         : NRTyler.KSP.CustomLaunchProcedure
-// 
+//
 // Author           : Nicholas Tyler
 // Created          : 09-20-2017
-// 
+//
 // Last Modified By : Nicholas Tyler
-// Last Modified On : 09-20-2017
-// 
+// Last Modified On : 03-09-2018
+//
 // License          : MIT License
 // ***********************************************************************
 
@@ -15,16 +15,16 @@ using System;
 namespace NRTyler.KSP.CustomLaunchProcedure
 {
     /// <summary>
-    /// Holds information directory info that must to be present for this application to run properly.
+    /// Holds directory information that must to be present for this application to run properly.
     /// </summary>
-    public class AppSetup
+    public class ApplicationDirectoryInfo
     {
-        public AppSetup() : this(null, null)
+        public ApplicationDirectoryInfo() : this(null, null)
         {
             
         }
 
-        public AppSetup(string directoryBeingCopied, string directoryBeingReplaced)
+        public ApplicationDirectoryInfo(string directoryBeingCopied, string directoryBeingReplaced)
         {
             BeginningDirectory   = directoryBeingCopied;
             DestinationDirectory = directoryBeingReplaced;
